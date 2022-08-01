@@ -7,7 +7,6 @@ import {
   LongPressGestureHandlerProps,
 } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
-import { parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -15,7 +14,6 @@ import { useLineChart } from './useLineChart';
 export type LineChartCursorProps = LongPressGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
-  holdValue?: boolean;
 };
 
 export const CursorContext = React.createContext({ type: '' });
@@ -25,18 +23,12 @@ LineChartCursor.displayName = 'LineChartCursor';
 export function LineChartCursor({
   children,
   type,
-  holdValue,
   ...props
 }: LineChartCursorProps) {
-  const { pathWidth: width, path } = React.useContext(
+  const { pathWidth: width, parsedPath } = React.useContext(
     LineChartDimensionsContext
   );
   const { currentX, currentIndex, isActive, data } = useLineChart();
-
-  const parsedPath = React.useMemo(
-    () => (path ? parse(path) : undefined),
-    [path]
-  );
 
   const onGestureEvent = useAnimatedGestureHandler<
     GestureEvent<LongPressGestureHandlerEventPayload>
@@ -60,12 +52,8 @@ export function LineChartCursor({
       }
     },
     onEnd: () => {
-      if (holdValue === true)  {
-        isActive.value = true;
-      } else {
-        isActive.value = false;
-        currentIndex.value = -1;
-      }
+      isActive.value = false;
+      currentIndex.value = -1;
     },
   });
 
