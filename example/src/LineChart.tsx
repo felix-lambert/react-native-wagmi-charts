@@ -10,6 +10,7 @@ import { Platform } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
+import { LabelTimeAgo } from './LabelTimeAgo/LabelTimeAgo';
 
 function invokeHaptic() {
   if (['ios', 'android'].includes(Platform.OS)) {
@@ -18,7 +19,8 @@ function invokeHaptic() {
 }
 
 export default function App() {
-  const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
+
+  const [points, setPoints] = React.useState<TLineChartPoint[]>();
   const [multiData, toggleMultiData] = React.useReducer(
     (state) => !state,
     false
@@ -28,9 +30,13 @@ export default function App() {
     false
   );
 
+  let dataProp: TLineChartDataProp = mockData;
+
   const [yRange, setYRange] = React.useState<undefined | 'low' | 'high'>(
     undefined
   );
+
+  const [timeFilter, setTimefilter] = React.useState('Tout');
 
   const toggleYRange = () => {
     setYRange((domain) => {
@@ -44,7 +50,31 @@ export default function App() {
     });
   };
 
-  let dataProp: TLineChartDataProp = data;
+  function resetGraphBasedOnFilter(indexToSlice: number, timeFilter: TimeFilters | 'Tout') {
+    console.log('reset graph')
+    setTimefilter(timeFilter);
+
+    console.log('index to slice')
+    console.log(indexToSlice);
+
+    const newGraphFiltered = dataProp.slice(indexToSlice);
+    // setMaxIndex(maxIndex);
+    // setMinIndex(minIndex);
+
+    console.log('new graph filtered')
+    console.log(newGraphFiltered.length)
+
+    setPoints(newGraphFiltered);
+    console.log('end reset');
+  }
+
+  React.useEffect(() => {
+    const newPoints = dataProp;
+
+    setTimefilter('Tout');
+
+    setPoints(newPoints);
+  }, [dataProp.length]);
 
   let chart = (
     <LineChart>
@@ -120,12 +150,17 @@ export default function App() {
               ? Math.max(...data.map((d) => d.value)) * 1.1
               : undefined,
         }}
-        data={dataProp}
+        data={points}
       >
         {chart}
+        <LabelTimeAgo
+          timeFilter={timeFilter}
+          defaultChartData={dataProp}
+          resetGraphBasedOnFilter={resetGraphBasedOnFilter}
+        />
         <Box marginX="major-2" marginTop="major-2">
           <Heading.H6 marginBottom={'major-2'}>Load Data</Heading.H6>
-          <Flex flexWrap={'wrap'}>
+          {/* <Flex flexWrap={'wrap'}>
             <Button onPress={() => setData(mockData)}>Data 1</Button>
             <Button onPress={() => setData(mockData2)}>Data 2</Button>
             <Button onPress={() => setData([...mockData, ...mockData2])}>
@@ -164,7 +199,7 @@ export default function App() {
             </Button>
             <Button onPress={toggleMultiData}>{`Multi Data`}</Button>
             <Button onPress={togglePartialDay}>{`Partial Day`}</Button>
-          </Flex>
+          </Flex> */}
         </Box>
         {!multiData && (
           <Stack padding="major-2" spacing="major-1">
