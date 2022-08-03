@@ -1144,7 +1144,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.16.5"
 
-"@babel/plugin-transform-object-assign@^7.10.4":
+"@babel/plugin-transform-object-assign@^7.16.7":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-assign/-/plugin-transform-object-assign-7.18.6.tgz#7830b4b6f83e1374a5afb9f6111bcfaea872cdd2"
   integrity sha512-mQisZ3JfqWh2gVXvfqYCAAyRs6+7oev+myBsTwW5RnPhYXOTuCEw2oe3YgxlXMViXUS53lG8koulI7mJ+8JE+A==
@@ -6487,11 +6487,6 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
-mockdate@^3.0.2:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/mockdate/-/mockdate-3.0.5.tgz#789be686deb3149e7df2b663d2bc4392bc3284fb"
-  integrity sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==
-
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -7223,17 +7218,17 @@ react-native-gesture-handler@^2.1.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-reanimated@~2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.3.1.tgz#c7abad48f9e6c84610b0d5e270088ecd61750382"
-  integrity sha512-nzjVqwkB8eeyPKT2KoiA9EEz17ZMFSGMoOTC17Z9b5nE2Z4ZHjHM5EKhY0TlwzXFUuJAE9PhOfxF0wIO/maZSA==
+react-native-reanimated@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.6.0.tgz#500497339bec2d18fd4979dc07c831997c9aee82"
+  integrity sha512-TG7u0d1iTx6BRQXhUp9DKEW/9K6169qiX9vweC+qOcVffGSZvjDZ+OyyI0faXIDvcf5LRHAud3mNtO3ANaHRhQ==
   dependencies:
-    "@babel/plugin-transform-object-assign" "^7.10.4"
+    "@babel/plugin-transform-object-assign" "^7.16.7"
     "@types/invariant" "^2.2.35"
     invariant "^2.2.4"
     lodash.isequal "^4.5.0"
-    mockdate "^3.0.2"
-    react-native-screens "^3.4.0"
+    react-native-screens "^3.11.1"
+    setimmediate "^1.0.5"
     string-hash-64 "^1.0.3"
 
 react-native-redash@^16.1.1:
@@ -7245,7 +7240,7 @@ react-native-redash@^16.1.1:
     normalize-svg-path "^1.0.1"
     parse-svg-path "^0.1.2"
 
-react-native-screens@^3.4.0:
+react-native-screens@^3.11.1:
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.15.0.tgz#78e42c8df72851b1ff235ddf5434b961ae123ca5"
   integrity sha512-ezC5TibsUYyqPuuHpZoM3iEl6bRzCVBMJeGaFkn7xznuOt1VwkZVub0BvafIEYR/+AQC/RjxzMSQPs1qal0+wA==
