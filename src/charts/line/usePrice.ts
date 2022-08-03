@@ -14,8 +14,11 @@ export function useLineChartPrice({
     if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
       return '';
     let price = 0;
-    price = data[currentIndex.value].value;
-    return price.toFixed(precision).toString();
+    price = data[currentIndex.value]?.value;
+    if (price) {
+      return price.toFixed(precision).toString();
+    }
+    return '';
   });
   const formatted = useDerivedValue(() => {
     let value = float.value || '';
