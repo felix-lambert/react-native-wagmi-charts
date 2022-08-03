@@ -89,7 +89,7 @@ export default function App() {
         <LineChart id="two">
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
-            <LineChart.HorizontalLine at={{ index: 4 }} />
+            <LineChart.HorizontalLine at={{ value: 4 }} />
           </LineChart.Path>
           <LineChart.CursorCrosshair
             color="hotpink"

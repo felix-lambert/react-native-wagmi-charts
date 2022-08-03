@@ -1,9 +1,8 @@
 import React from 'react';
 import { Line as SVGLine, LineProps } from 'react-native-svg';
-import { parse } from 'react-native-redash';
 
 import { LineChartDimensionsContext } from './Chart';
-import { useLineChart } from './useLineChart';
+import { useHorizontalLineChart } from './useHorizontalLineChart';
 
 type HorizontalLineProps = {
   color?: string;
@@ -40,16 +39,11 @@ export function LineChartHorizontalLine({
   at = { value: 0 },
   offsetY = 0,
 }: HorizontalLineProps) {
-  const { width, path, height, gutter } = React.useContext(
+  const { width, height, gutter } = React.useContext(
     LineChartDimensionsContext
   );
-  const { data, yDomain } = useLineChart();
+  const { yDomain } = useHorizontalLineChart();
 
-  const parsedPath = React.useMemo(() => parse(path), [path]);
-  const pointWidth = React.useMemo(
-    () => width / data.length,
-    [data.length, width]
-  );
 
   const [y, setY] = React.useState(0);
 
@@ -68,16 +62,7 @@ export function LineChartHorizontalLine({
     const heightBetweenGutters = height - gutter * 2;
     const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
     setY(offsetTopPixels + offsetY);
-  }, [
-    at,
-    gutter,
-    height,
-    offsetY,
-    parsedPath,
-    pointWidth,
-    yDomain.max,
-    yDomain.min,
-  ]);
+  }, [at.value, gutter, height, offsetY, yDomain.max, yDomain.min]);
 
   const lineTransitionProps = {
     x1: 0,
