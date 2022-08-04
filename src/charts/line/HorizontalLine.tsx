@@ -44,7 +44,6 @@ export function LineChartHorizontalLine({
   );
   const { yDomain } = useHorizontalLineChart();
 
-
   const [y, setY] = React.useState(0);
 
   React.useEffect(() => {
