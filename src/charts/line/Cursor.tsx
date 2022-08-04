@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
+  GestureEvent,
   LongPressGestureHandler,
+  LongPressGestureHandlerEventPayload,
   LongPressGestureHandlerProps,
-  State,
 } from 'react-native-gesture-handler';
+
+import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -47,42 +50,48 @@ export function LineChartCursor({
     }
   }, []);
 
+  const onGestureEvent = useAnimatedGestureHandler<
+    GestureEvent<LongPressGestureHandlerEventPayload>
+  >({
+    onActive: ({ x }) => {
+      if (parsedPath) {
+        const boundedX = x <= width ? x : width;
+        isActive.value = true;
+        currentX.value = boundedX;
+
+        // on Web, we could drag the cursor to be negative, breaking it
+        // so we clamp the index at 0 to fix it
+        // https://github.com/coinjar/react-native-wagmi-charts/issues/24
+        const minIndex = 0;
+        const boundedIndex = Math.max(
+          minIndex,
+          Math.round(boundedX / width / (1 / (data.length - 1)))
+        );
+
+        currentIndex.value = boundedIndex;
+      }
+    },
+    onEnd: () => {
+      if (holdValue === true) {
+        isActive.value = true;
+      } else {
+        isActive.value = false;
+        currentIndex.value = -1;
+      }
+    },
+  });
+
   return (
     <CursorContext.Provider value={{ type }}>
       <LongPressGestureHandler
         minDurationMs={0}
         maxDist={999999}
-        onHandlerStateChange={({ nativeEvent }) => {
-          if (State.ACTIVE === nativeEvent.state) {
-            if (parsedPath) {
-              const boundedX = nativeEvent.x <= width ? nativeEvent.x : width;
-              isActive.value = true;
-              currentX.value = boundedX;
-
-              // on Web, we could drag the cursor to be negative, breaking it
-              // so we clamp the index at 0 to fix it
-              // https://github.com/coinjar/react-native-wagmi-charts/issues/24
-              const minIndex = 0;
-              const boundedIndex = Math.max(
-                minIndex,
-                Math.round(boundedX / width / (1 / (data.length - 1)))
-              );
-
-              currentIndex.value = boundedIndex;
-            }
-          }
-          if (State.END === nativeEvent.state) {
-            if (holdValue === true) {
-              isActive.value = true;
-            } else {
-              isActive.value = false;
-              currentIndex.value = -1;
-            }
-          }
-        }}
+        onGestureEvent={onGestureEvent}
         {...props}
       >
-        <View style={StyleSheet.absoluteFill}>{children}</View>
+        <Animated.View style={StyleSheet.absoluteFill}>
+          {children}
+        </Animated.View>
       </LongPressGestureHandler>
     </CursorContext.Provider>
   );
