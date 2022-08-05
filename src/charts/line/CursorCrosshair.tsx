@@ -19,7 +19,6 @@ type LineChartCursorCrosshairProps = Omit<
   crosshairWrapperProps?: Animated.AnimateProps<ViewProps>;
   crosshairProps?: ViewProps;
   crosshairOuterProps?: ViewProps;
-  svgComponent: React.Component
 };
 
 LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
@@ -32,7 +31,6 @@ export function LineChartCursorCrosshair({
   crosshairWrapperProps = {},
   crosshairProps = {},
   crosshairOuterProps = {},
-  svgComponent,
   ...props
 }: LineChartCursorCrosshairProps) {
   const { currentX, currentY, isActive } = useLineChart();
@@ -76,9 +74,9 @@ export function LineChartCursorCrosshair({
           crosshairWrapperProps.style,
         ]}
       >
-        {svgComponent}
+        {children}
       </Animated.View>
-      {children}
+
     </LineChartCursor>
   );
 }
