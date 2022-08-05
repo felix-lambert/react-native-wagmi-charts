@@ -1,6 +1,6 @@
 {
   "name": "@epsor/react-native-wagmi-charts",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "A sweet candlestick chart for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
