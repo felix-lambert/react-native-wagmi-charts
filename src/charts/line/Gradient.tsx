@@ -43,33 +43,19 @@ export function LineChartGradient({
 
   return (
     <>
-      {children ? (
-        <Defs>
-          <LinearGradient
-            id={`${localId.current}`}
-            x1="0"
-            x2="0"
-            y1="0"
-            y2="100%"
-          >
-            {children}
-          </LinearGradient>
-        </Defs>
-      ) : (
-        <Defs>
-          <LinearGradient
-            id={`${localId.current}`}
-            x1="0"
-            x2="0"
-            y1="0"
-            y2="100%"
-          >
-            <Stop offset="20%" stopColor={color} stopOpacity={0.15} />
-            <Stop offset="40%" stopColor={color} stopOpacity={0.05} />
-            <Stop offset="100%" stopColor={color} stopOpacity={0} />
-          </LinearGradient>
-        </Defs>
-      )}
+      <Defs>
+        <LinearGradient
+          id={`${localId.current}`}
+          x1="0"
+          x2="0"
+          y1="0"
+          y2="100%"
+        >
+          <Stop offset="20%" stopColor={color} stopOpacity={1} />
+          <Stop offset="40%" stopColor={color} stopOpacity={1} />
+          <Stop offset="100%" stopColor={color} stopOpacity={0.5} />
+        </LinearGradient>
+      </Defs>
       <AnimatedPath
         animatedProps={animatedProps}
         fill={`url(#${localId.current})`}
