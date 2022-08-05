@@ -5,17 +5,9 @@ import {
   TLineChartDataProp,
   TLineChartPoint,
 } from 'react-native-wagmi-charts';
-import * as haptics from 'expo-haptics';
-import { Platform } from 'react-native';
 
 import mockData from './data/line-data.json';
 import mockData2 from './data/line-data2.json';
-
-function invokeHaptic() {
-  if (['ios', 'android'].includes(Platform.OS)) {
-    haptics.impactAsync(haptics.ImpactFeedbackStyle.Light);
-  }
-}
 
 export default function App() {
   const [data, setData] = React.useState<TLineChartPoint[]>(mockData);
@@ -60,13 +52,6 @@ export default function App() {
         )}
       </LineChart.Path>
         */}
-      <LineChart.CursorCrosshair
-        onActivated={invokeHaptic}
-        onEnded={invokeHaptic}
-      >
-        <LineChart.Tooltip position="top" />
-        <LineChart.HoverTrap />
-      </LineChart.CursorCrosshair>
     </LineChart>
   );
 
@@ -79,25 +64,12 @@ export default function App() {
       <LineChart.Group>
         <LineChart id="one">
           <LineChart.Path animateOnMount="foreground" color="blue" />
-          <LineChart.CursorCrosshair
-            onActivated={invokeHaptic}
-            onEnded={invokeHaptic}
-          >
-            <LineChart.Tooltip />
-          </LineChart.CursorCrosshair>
         </LineChart>
         <LineChart id="two">
           <LineChart.Path color="red">
             <LineChart.Gradient color="black" />
             <LineChart.HorizontalLine at={{ value: 4 }} />
           </LineChart.Path>
-          <LineChart.CursorCrosshair
-            color="hotpink"
-            onActivated={invokeHaptic}
-            onEnded={invokeHaptic}
-          >
-            <LineChart.Tooltip />
-          </LineChart.CursorCrosshair>
         </LineChart>
       </LineChart.Group>
     );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, View, ViewProps } from 'react-native';
+import { Platform, ViewProps } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -19,6 +19,7 @@ type LineChartCursorCrosshairProps = Omit<
   crosshairWrapperProps?: Animated.AnimateProps<ViewProps>;
   crosshairProps?: ViewProps;
   crosshairOuterProps?: ViewProps;
+  svgComponent: React.Component
 };
 
 LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
@@ -31,6 +32,7 @@ export function LineChartCursorCrosshair({
   crosshairWrapperProps = {},
   crosshairProps = {},
   crosshairOuterProps = {},
+  svgComponent,
   ...props
 }: LineChartCursorCrosshairProps) {
   const { currentX, currentY, isActive } = useLineChart();
@@ -74,32 +76,7 @@ export function LineChartCursorCrosshair({
           crosshairWrapperProps.style,
         ]}
       >
-        <View
-          {...crosshairOuterProps}
-          style={[
-            {
-              backgroundColor: color,
-              width: outerSize,
-              height: outerSize,
-              borderRadius: outerSize,
-              opacity: 0.1,
-              position: 'absolute',
-            },
-            crosshairOuterProps.style,
-          ]}
-        />
-        <View
-          {...crosshairProps}
-          style={[
-            {
-              backgroundColor: color,
-              width: size,
-              height: size,
-              borderRadius: size,
-            },
-            crosshairProps.style,
-          ]}
-        />
+        {svgComponent}
       </Animated.View>
       {children}
     </LineChartCursor>
