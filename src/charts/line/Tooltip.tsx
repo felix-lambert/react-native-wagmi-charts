@@ -8,7 +8,7 @@ import Animated, {
 import { LineChartDimensionsContext } from './Chart';
 import { CursorContext } from './Cursor';
 import { LineChartPriceText, LineChartPriceTextProps } from './PriceText';
-import { useHorizontalLineChart } from './useHorizontalLineChart';
+import { useLineChart } from './useLineChart';
 
 type LineChartTooltipProps = Animated.AnimateProps<ViewProps> & {
   children?: React.ReactNode;
@@ -34,7 +34,7 @@ export function LineChartTooltip({
 }: LineChartTooltipProps) {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
-  const { currentX, currentY, isActive } = useHorizontalLineChart();
+  const { currentX, currentY, isActive } = useLineChart();
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);

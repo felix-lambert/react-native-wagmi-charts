@@ -2,7 +2,7 @@ import React from 'react';
 import { Line as SVGLine, LineProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
-import { useHorizontalLineChart } from './useHorizontalLineChart';
+import { useLineChart } from './useLineChart';
 
 type HorizontalLineProps = {
   color?: string;
@@ -42,7 +42,7 @@ export function LineChartHorizontalLine({
   const { width, height, gutter } = React.useContext(
     LineChartDimensionsContext
   );
-  const { yDomain } = useHorizontalLineChart();
+  const { yDomain } = useLineChart();
 
   const [y, setY] = React.useState(0);
 

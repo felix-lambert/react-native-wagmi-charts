@@ -1,5 +1,4 @@
 import { useDerivedValue } from 'react-native-reanimated';
-
 import { formatPrice } from '../../utils';
 import type { TFormatterFn } from '../candle/types';
 import { useLineChart } from './useLineChart';
@@ -11,8 +10,16 @@ export function useLineChartPrice({
   const { currentIndex, data } = useLineChart();
 
   const float = useDerivedValue(() => {
-    if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
-      return '';
+    if (
+      typeof currentIndex.value === 'undefined' ||
+      currentIndex.value === -1 ||
+      data[currentIndex.value] === undefined
+    ) {
+      let price = 0;
+      price = data[data.length - 1].value;
+      return price.toFixed(precision).toString();
+    }
+
     let price = 0;
     price = data[currentIndex.value].value;
     return price.toFixed(precision).toString();

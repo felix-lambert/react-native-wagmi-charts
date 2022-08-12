@@ -35,20 +35,19 @@ export function LineChartCursor({
   );
   const { currentX, currentIndex, isActive, data } = useLineChart();
 
-  React.useEffect(() => {
-    if (mountWithActivatedCursor === true) {
-      const boundedX = width;
-      isActive.value = true;
-      currentX.value = boundedX;
+  if (mountWithActivatedCursor) {
+    const boundedX = width;
+    isActive.value = true;
+    currentX.value = boundedX;
 
-      const minIndex = 0;
-      const boundedIndex = Math.max(
-        minIndex,
-        Math.round(boundedX / width / (1 / (data.length - 1)))
-      );
-      currentIndex.value = boundedIndex;
-    }
-  }, []);
+    const minIndex = 0;
+    const boundedIndex = Math.max(
+      minIndex,
+      Math.round(boundedX / width / (1 / (data.length - 1)))
+    );
+
+    currentIndex.value = boundedIndex;
+  }
 
   const onGestureEvent = useAnimatedGestureHandler<
     GestureEvent<LongPressGestureHandlerEventPayload>
