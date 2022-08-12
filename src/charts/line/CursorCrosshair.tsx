@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { Platform, View, ViewProps } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
-
+import type { ViewProps } from 'react-native';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { LineChartDimensionsContext } from './Chart';
 import { LineChartCursor, LineChartCursorProps } from './Cursor';
 import { useLineChart } from './useLineChart';
+import { getYForX } from 'react-native-redash';
 
 type LineChartCursorCrosshairProps = Omit<
   LineChartCursorProps,
@@ -25,39 +23,41 @@ LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
 
 export function LineChartCursorCrosshair({
   children,
-  color = 'black',
-  size = 8,
   outerSize = 32,
   crosshairWrapperProps = {},
-  crosshairProps = {},
-  crosshairOuterProps = {},
   ...props
 }: LineChartCursorCrosshairProps) {
-  const { currentX, currentY, isActive } = useLineChart();
+  const { currentX, currentY } = useLineChart();
 
-  // It seems that enabling spring animation on initial render on Android causes a crash.
-  const [enableSpringAnimation, setEnableSpringAnimation] = React.useState(
-    Platform.OS === 'ios'
-  );
-  React.useEffect(() => {
-    setTimeout(() => {
-      setEnableSpringAnimation(true);
-    }, 100);
-  }, []);
+  const { parsedPath, width } = React.useContext(LineChartDimensionsContext);
 
-  const animatedCursorStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: currentX.value - outerSize / 2 },
-      { translateY: currentY.value - outerSize / 2 },
-      {
-        scale: enableSpringAnimation
-          ? withSpring(isActive.value ? 1 : 0, {
-              damping: 10,
-            })
-          : 0,
-      },
-    ],
-  }));
+  const firstRender = React.useRef(true);
+
+  const animatedCursorStyle = useAnimatedStyle(() => {
+    const boundedX = Math.min(width, currentX.value);
+
+    const currentNotFirstRenderY = {
+      value: getYForX(parsedPath, boundedX) || 0,
+    };
+
+    if (firstRender.current) {
+      firstRender.current = false;
+
+      return {
+        transform: [
+          { translateX: currentX.value - outerSize / 2 },
+          { translateY: currentY.value - outerSize / 2 },
+        ],
+      };
+    }
+
+    return {
+      transform: [
+        { translateX: currentX.value - outerSize / 2 },
+        { translateY: currentNotFirstRenderY.value - outerSize / 2 },
+      ],
+    };
+  });
 
   return (
     <LineChartCursor type="crosshair" {...props}>
@@ -74,34 +74,8 @@ export function LineChartCursorCrosshair({
           crosshairWrapperProps.style,
         ]}
       >
-        <View
-          {...crosshairOuterProps}
-          style={[
-            {
-              backgroundColor: color,
-              width: outerSize,
-              height: outerSize,
-              borderRadius: outerSize,
-              opacity: 0.1,
-              position: 'absolute',
-            },
-            crosshairOuterProps.style,
-          ]}
-        />
-        <View
-          {...crosshairProps}
-          style={[
-            {
-              backgroundColor: color,
-              width: size,
-              height: size,
-              borderRadius: size,
-            },
-            crosshairProps.style,
-          ]}
-        />
+        {children}
       </Animated.View>
-      {children}
     </LineChartCursor>
   );
 }

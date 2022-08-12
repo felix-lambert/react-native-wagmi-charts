@@ -43,7 +43,7 @@ export function LineChartCursorLine({
         <Svg style={styles.svg}>
           <SVGLine
             x1={0}
-            y1={0}
+            y1={100}
             x2={0}
             y2={height}
             strokeWidth={2}
@@ -60,8 +60,10 @@ export function LineChartCursorLine({
 
 const styles = StyleSheet.create({
   svg: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
     // height: 100% is required for <svg /> on web
-    height: '100%',
+    height: 230,
+    // backgroundColor: 'red',
+    bottom: 45,
   },
 });
