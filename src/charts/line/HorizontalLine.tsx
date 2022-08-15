@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line as SVGLine, LineProps } from 'react-native-svg';
+import { Line, LineProps } from 'react-native-svg';
 
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
@@ -71,11 +71,11 @@ export function LineChartHorizontalLine({
   };
 
   return (
-    <SVGLine
+    <Line
       {...lineTransitionProps}
-      strokeWidth={2}
+      strokeWidth={1}
       stroke={color}
-      strokeDasharray="3 3"
+      strokeDasharray="1 10"
       {...lineProps}
     />
   );

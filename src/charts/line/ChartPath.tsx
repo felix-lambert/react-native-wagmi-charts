@@ -8,18 +8,18 @@ import Animated, {
   WithTimingConfig,
 } from 'react-native-reanimated';
 import flattenChildren from 'react-keyed-flatten-children';
-
 import { LineChartDimensionsContext } from './Chart';
 import { LineChartPath, LineChartPathProps } from './Path';
 import { useLineChart } from './useLineChart';
 
-const BACKGROUND_COMPONENTS = [
+const BACKGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
+const FOREGROUND_COMPONENTS = [
   'LineChartHighlight',
-  'LineChartHorizontalLine',
-  'LineChartGradient',
   'LineChartDot',
+  'LineChartGradient',
 ];
-const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
+
+const ZINDEX_COMPONENTS = ['LineChartHorizontalLine'];
 
 const AnimatedSVG = Animated.createAnimatedComponent(Svg);
 
@@ -113,6 +113,7 @@ export function LineChartPathWrapper({
 
   let backgroundChildren;
   let foregroundChildren;
+  let zIndexChildren;
   if (children) {
     const iterableChildren = flattenChildren(children);
     backgroundChildren = iterableChildren.filter((child) =>
@@ -123,8 +124,11 @@ export function LineChartPathWrapper({
       // @ts-ignore
       FOREGROUND_COMPONENTS.includes(child?.type?.displayName)
     );
+    zIndexChildren = iterableChildren.filter((child) =>
+      // @ts-ignore
+      ZINDEX_COMPONENTS.includes(child?.type?.displayName)
+    );
   }
-
   ////////////////////////////////////////////////
 
   return (
@@ -145,6 +149,7 @@ export function LineChartPathWrapper({
               {...pathProps}
             />
             {backgroundChildren}
+            {zIndexChildren}
           </Svg>
         </View>
       </LineChartPathContext.Provider>
@@ -159,6 +164,15 @@ export function LineChartPathWrapper({
           <AnimatedSVG animatedProps={svgProps} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
             {foregroundChildren}
+            {zIndexChildren}
+            <View
+              style={{
+                backgroundColor: 'white',
+                top: 175,
+                height: 550,
+                width: svgProps.width,
+              }}
+            />
           </AnimatedSVG>
         </View>
       </LineChartPathContext.Provider>
