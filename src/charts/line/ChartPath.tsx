@@ -169,7 +169,7 @@ export function LineChartPathWrapper({
               style={{
                 backgroundColor: 'white',
                 top: 175,
-                height: 550,
+                height: 130,
                 width: svgProps.width,
               }}
             />
