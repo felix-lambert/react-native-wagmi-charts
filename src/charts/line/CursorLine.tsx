@@ -24,14 +24,28 @@ export function LineChartCursorLine({
   holdValue = false,
   mountWithActivatedCursor = false,
 }: LineChartCursorLineProps) {
-  const { height } = React.useContext(LineChartDimensionsContext);
+  const { height, pathWidth } = React.useContext(LineChartDimensionsContext);
   const { currentX, isActive } = useLineChart();
 
-  const vertical = useAnimatedStyle(() => ({
-    opacity: isActive.value ? 1 : 0,
-    height: '100%',
-    transform: [{ translateX: currentX.value }],
-  }));
+  const firstRender = React.useRef(true);
+
+  const vertical = useAnimatedStyle(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+
+      return {
+        opacity: isActive.value ? 1 : 0,
+        height: '100%',
+        transform: [{ translateX: pathWidth }],
+      };
+    }
+
+    return {
+      opacity: isActive.value ? 1 : 0,
+      height: '100%',
+      transform: [{ translateX: currentX.value }],
+    };
+  });
 
   return (
     <LineChartCursor
