@@ -27,36 +27,33 @@ export function LineChartCursorCrosshair({
   crosshairWrapperProps = {},
   ...props
 }: LineChartCursorCrosshairProps) {
-  const { currentX, currentY } = useLineChart();
+  const { currentX, currentY, isActive } = useLineChart();
 
   const { parsedPath, width } = React.useContext(LineChartDimensionsContext);
 
-  const firstRender = React.useRef(true);
-
   const animatedCursorStyle = useAnimatedStyle(() => {
-    const boundedX = Math.min(width, currentX.value);
-
-    const currentNotFirstRenderY = {
-      value: getYForX(parsedPath, boundedX) || 0,
-    };
-
-    if (firstRender.current) {
-      firstRender.current = false;
-
+    if (isActive.value === false) {
       return {
         transform: [
-          { translateX: currentX.value - outerSize / 2 },
+          { translateX: width - outerSize / 2 },
           { translateY: currentY.value - outerSize / 2 },
         ],
       };
     }
+    if (isActive.value === true) {
+      const boundedX = Math.min(width, currentX.value);
 
-    return {
-      transform: [
-        { translateX: currentX.value - outerSize / 2 },
-        { translateY: currentNotFirstRenderY.value - outerSize / 2 },
-      ],
-    };
+      const currentNotFirstRenderY = {
+        value: getYForX(parsedPath, boundedX) || 0,
+      };
+
+      return {
+        transform: [
+          { translateX: currentX.value - outerSize / 2 },
+          { translateY: currentNotFirstRenderY.value - outerSize / 2 },
+        ],
+      };
+    }
   });
 
   return (

@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Svg } from 'react-native-svg';
+import Svg from 'react-native-svg';
 import Animated, {
   useAnimatedProps,
   useSharedValue,
-  withTiming,
   WithTimingConfig,
 } from 'react-native-reanimated';
 import flattenChildren from 'react-keyed-flatten-children';
@@ -47,30 +46,19 @@ type LineChartPathWrapperProps = {
 LineChartPathWrapper.displayName = 'LineChartPathWrapper';
 
 export function LineChartPathWrapper({
-  animationDuration = 300,
-  animationProps = {},
   children,
   color = 'black',
   inactiveColor,
   width: strokeWidth = 3,
-  widthOffset = 20,
   pathProps = {},
   showInactivePath = true,
   animateOnMount,
-  mountAnimationDuration = animationDuration,
-  mountAnimationProps = animationProps,
 }: LineChartPathWrapperProps) {
   const { height, pathWidth, width } = React.useContext(
     LineChartDimensionsContext
   );
   const { currentX, isActive } = useLineChart();
   const isMounted = useSharedValue(false);
-  const hasMountedAnimation = useSharedValue(false);
-
-  React.useEffect(() => {
-    isMounted.value = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   ////////////////////////////////////////////////
 
@@ -79,31 +67,12 @@ export function LineChartPathWrapper({
     const inactiveWidth =
       !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
 
-    let duration =
-      shouldAnimateOnMount && !hasMountedAnimation.value
-        ? mountAnimationDuration
-        : animationDuration;
-    const props =
-      shouldAnimateOnMount && !hasMountedAnimation.value
-        ? mountAnimationProps
-        : animationProps;
-
-    if (isActive.value) {
-      duration = 0;
-    }
-
     return {
-      width: withTiming(
-        isActive.value
-          ? // on Web, <svg /> elements don't support negative widths
-            // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
-            Math.max(currentX.value, 0)
-          : inactiveWidth + widthOffset,
-        Object.assign({ duration }, props),
-        () => {
-          hasMountedAnimation.value = true;
-        }
-      ),
+      width: isActive.value
+        ? // on Web, <svg /> elements don't support negative widths
+          // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+          Math.max(currentX.value, 0)
+        : inactiveWidth - 1,
     };
   });
 
@@ -165,6 +134,7 @@ export function LineChartPathWrapper({
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
             {foregroundChildren}
             {zIndexChildren}
+            <View style={{ left: svgProps.width }}></View>
             <View
               style={{
                 backgroundColor: 'white',

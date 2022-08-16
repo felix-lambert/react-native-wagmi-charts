@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import Svg, { Line as SVGLine, LineProps } from 'react-native-svg';
 
@@ -27,24 +27,21 @@ export function LineChartCursorLine({
   const { height, pathWidth } = React.useContext(LineChartDimensionsContext);
   const { currentX, isActive } = useLineChart();
 
-  const firstRender = React.useRef(true);
-
   const vertical = useAnimatedStyle(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-
+    if (isActive.value === false) {
       return {
-        opacity: isActive.value ? 1 : 0,
+        opacity: 1,
         height: '100%',
         transform: [{ translateX: pathWidth }],
       };
     }
-
-    return {
-      opacity: isActive.value ? 1 : 0,
-      height: '100%',
-      transform: [{ translateX: currentX.value }],
-    };
+    if (isActive.value === true) {
+      return {
+        opacity: 1,
+        height: '100%',
+        transform: [{ translateX: currentX.value }],
+      };
+    }
   });
 
   return (
@@ -67,7 +64,6 @@ export function LineChartCursorLine({
           />
         </Svg>
       </Animated.View>
-      {children}
     </LineChartCursor>
   );
 }
