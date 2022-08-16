@@ -34,7 +34,7 @@ export function LineChartTooltip({
 }: LineChartTooltipProps) {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
-  const { currentX, currentY, isActive } = useLineChart();
+  const { currentX, currentY } = useLineChart();
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);
@@ -90,7 +90,7 @@ export function LineChartTooltip({
               : height - elementHeight.value - yGutter,
         },
       ],
-      opacity: isActive.value ? 1 : 0,
+      opacity: 1,
     };
   });
 
