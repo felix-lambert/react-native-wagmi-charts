@@ -50,8 +50,6 @@ export function LineChartTooltip({
   );
 
   const animatedCursorStyle = useAnimatedStyle(() => {
-    console.log('begin tooltip');
-
     let translateXOffset = elementWidth.value / 2;
     if (currentX.value < elementWidth.value / 2 + xGutter) {
       const xOffset = elementWidth.value / 2 + xGutter - currentX.value;
@@ -70,8 +68,6 @@ export function LineChartTooltip({
         translateYOffset = yGutter;
       }
     }
-
-    console.log('return tooltip');
 
     return {
       transform: [
