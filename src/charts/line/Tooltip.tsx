@@ -34,7 +34,7 @@ export function LineChartTooltip({
 }: LineChartTooltipProps) {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
-  const { currentX } = useLineChart();
+  const { currentX, isActive } = useLineChart();
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);
@@ -50,39 +50,52 @@ export function LineChartTooltip({
   );
 
   const animatedCursorStyle = useAnimatedStyle(() => {
-    let translateXOffset = elementWidth.value / 2;
-    if (currentX.value < elementWidth.value / 2 + xGutter) {
-      const xOffset = elementWidth.value / 2 + xGutter - currentX.value;
-      translateXOffset = translateXOffset - xOffset;
+    if (isActive.value === false) {
+      return {
+        transform: [
+          { translateX: width - 100 },
+          {
+            translateY: yGutter + 15,
+          },
+        ],
+        opacity: 1,
+      };
     }
-    if (currentX.value > width - elementWidth.value / 2 - xGutter) {
-      const xOffset =
-        currentX.value - (width - elementWidth.value / 2 - xGutter);
-      translateXOffset = translateXOffset + xOffset;
-    }
-
-    let translateYOffset = 0;
-    if (position === 'top') {
-      translateYOffset = elementHeight.value / 2 + cursorGutter;
-      if (translateYOffset < yGutter) {
-        translateYOffset = yGutter;
+    if (isActive.value === true) {
+      let translateXOffset = elementWidth.value / 2;
+      if (currentX.value < elementWidth.value / 2 + xGutter) {
+        const xOffset = elementWidth.value / 2 + xGutter - currentX.value;
+        translateXOffset = translateXOffset - xOffset;
       }
-    }
+      if (currentX.value > width - elementWidth.value / 2 - xGutter) {
+        const xOffset =
+          currentX.value - (width - elementWidth.value / 2 - xGutter);
+        translateXOffset = translateXOffset + xOffset;
+      }
 
-    return {
-      transform: [
-        { translateX: currentX.value - translateXOffset },
-        {
-          translateY:
-            type === 'crosshair'
-              ? translateYOffset
-              : position === 'top'
-              ? yGutter
-              : height - elementHeight.value - yGutter,
-        },
-      ],
-      opacity: 1,
-    };
+      let translateYOffset = 0;
+      if (position === 'top') {
+        translateYOffset = elementHeight.value / 2 + cursorGutter;
+        if (translateYOffset < yGutter) {
+          translateYOffset = yGutter;
+        }
+      }
+
+      return {
+        transform: [
+          { translateX: currentX.value - translateXOffset },
+          {
+            translateY:
+              type === 'crosshair'
+                ? translateYOffset
+                : position === 'top'
+                ? yGutter
+                : height - elementHeight.value - yGutter,
+          },
+        ],
+        opacity: 1,
+      };
+    }
   });
 
   return (
