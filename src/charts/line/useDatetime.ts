@@ -16,13 +16,17 @@ export function useLineChartDatetime({
   const { currentIndex, data } = useLineChart();
 
   const timestamp = useDerivedValue(() => {
-    if (typeof currentIndex.value === 'undefined' || currentIndex.value === -1)
-      return '';
+    if (
+      typeof currentIndex.value === 'undefined' ||
+      currentIndex.value === -1
+    ) {
+      return data[data.length - 1]?.timestamp;
+    }
+
     return data[currentIndex.value]?.timestamp;
   });
 
   const timestampString = useDerivedValue(() => {
-    if (timestamp.value === '') return '';
     return timestamp?.value?.toString();
   });
 

@@ -32,19 +32,21 @@ export function LineChartCursor({
   );
   const { currentX, currentIndex, isActive, data } = useLineChart();
 
-  if (isActive.value === false) {
-    const boundedX = width;
-    // isActive.value = true;
-    currentX.value = boundedX;
+  React.useEffect(() => {
+    if (isActive.value === false) {
+      const boundedX = width;
 
-    const minIndex = 0;
-    const boundedIndex = Math.max(
-      minIndex,
-      Math.round(boundedX / width / (1 / (data.length - 1)))
-    );
+      currentX.value = boundedX;
 
-    currentIndex.value = boundedIndex;
-  }
+      const minIndex = 0;
+      const boundedIndex = Math.max(
+        minIndex,
+        Math.round(boundedX / width / (1 / (data.length - 1)))
+      );
+
+      currentIndex.value = boundedIndex;
+    }
+  }, []);
 
   return (
     <CursorContext.Provider value={{ type }}>

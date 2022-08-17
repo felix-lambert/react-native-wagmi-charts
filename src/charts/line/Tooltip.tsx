@@ -34,7 +34,7 @@ export function LineChartTooltip({
 }: LineChartTooltipProps) {
   const { width, height } = React.useContext(LineChartDimensionsContext);
   const { type } = React.useContext(CursorContext);
-  const { currentX, currentY } = useLineChart();
+  const { currentX } = useLineChart();
 
   const x = useSharedValue(0);
   const elementWidth = useSharedValue(0);
@@ -50,6 +50,8 @@ export function LineChartTooltip({
   );
 
   const animatedCursorStyle = useAnimatedStyle(() => {
+    console.log('begin tooltip');
+
     let translateXOffset = elementWidth.value / 2;
     if (currentX.value < elementWidth.value / 2 + xGutter) {
       const xOffset = elementWidth.value / 2 + xGutter - currentX.value;
@@ -64,19 +66,12 @@ export function LineChartTooltip({
     let translateYOffset = 0;
     if (position === 'top') {
       translateYOffset = elementHeight.value / 2 + cursorGutter;
-      if (currentY.value - translateYOffset < yGutter) {
-        translateYOffset = currentY.value - yGutter;
-      }
-    } else if (position === 'bottom') {
-      translateYOffset = -(elementHeight.value / 2) - cursorGutter / 2;
-      if (
-        currentY.value - translateYOffset + elementHeight.value >
-        height - yGutter
-      ) {
-        translateYOffset =
-          currentY.value - (height - yGutter) + elementHeight.value;
+      if (translateYOffset < yGutter) {
+        translateYOffset = yGutter;
       }
     }
+
+    console.log('return tooltip');
 
     return {
       transform: [
@@ -84,7 +79,7 @@ export function LineChartTooltip({
         {
           translateY:
             type === 'crosshair'
-              ? currentY.value - translateYOffset
+              ? translateYOffset
               : position === 'top'
               ? yGutter
               : height - elementHeight.value - yGutter,
