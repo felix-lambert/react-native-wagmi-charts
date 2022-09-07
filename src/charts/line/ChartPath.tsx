@@ -12,11 +12,6 @@ import { LineChartPath, LineChartPathProps } from './Path';
 import { useLineChart } from './useLineChart';
 
 const BACKGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
-const FOREGROUND_COMPONENTS = [
-  'LineChartHighlight',
-  'LineChartDot',
-  'LineChartGradient',
-];
 
 const ZINDEX_COMPONENTS = ['LineChartHorizontalLine'];
 
@@ -81,17 +76,12 @@ export function LineChartPathWrapper({
   ////////////////////////////////////////////////
 
   let backgroundChildren;
-  let foregroundChildren;
   let zIndexChildren;
   if (children) {
     const iterableChildren = flattenChildren(children);
     backgroundChildren = iterableChildren.filter((child) =>
       // @ts-ignore
       BACKGROUND_COMPONENTS.includes(child?.type?.displayName)
-    );
-    foregroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
-      FOREGROUND_COMPONENTS.includes(child?.type?.displayName)
     );
     zIndexChildren = iterableChildren.filter((child) =>
       // @ts-ignore
@@ -132,17 +122,6 @@ export function LineChartPathWrapper({
         <View style={StyleSheet.absoluteFill}>
           <AnimatedSVG animatedProps={svgProps} height={height}>
             <LineChartPath color={color} width={strokeWidth} {...pathProps} />
-            {foregroundChildren}
-            {zIndexChildren}
-            <View style={{ left: svgProps.width }}></View>
-            <View
-              style={{
-                backgroundColor: 'white',
-                top: 175,
-                height: 130,
-                width: svgProps.width,
-              }}
-            />
           </AnimatedSVG>
         </View>
       </LineChartPathContext.Provider>
