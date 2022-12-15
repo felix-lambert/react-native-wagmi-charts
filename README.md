@@ -4,7 +4,6 @@ A sweet & simple chart library for React Native that will make us feel like **W*
 
 <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
   <img src="https://user-images.githubusercontent.com/7336481/133024970-07321941-4f26-44d2-867f-dac19d110941.gif" width="300px" />
-  <img src="https://user-images.githubusercontent.com/7336481/133024976-3dc9056c-d936-439a-af41-57cbf9277a01.gif" width="300px" />
 </div>
 
 ## Features
@@ -43,13 +42,6 @@ A sweet & simple chart library for React Native that will make us feel like **W*
   - [Customizing size](#customizing-size)
   - [Customizing labels](#customizing-labels)
   - [Customizing tooltips](#customizing-tooltips)
-- [Candlestick Chart Guides](#candlestick-chart-guides)
-  - [Interactive cursors](#interactive-cursors-1)
-  - [Interactive labels](#interactive-labels-1)
-  - [Interactive tooltips](#interactive-tooltips-1)
-  - [Haptic feedback](#haptic-feedback-1)
-  - [Colors](#colors-1)
-  - [Customizing labels](#customizing-labels-1)
 - [Component APIs](#component-apis)
   - [LineChart.Provider](#linechartprovider)
   - [LineChart](#linechart)
@@ -137,59 +129,6 @@ function Example() {
         <LineChart.Path />
       </LineChart>
     </LineChart.Provider>
-  );
-}
-```
-
-### Candlestick chart
-
-To render a simple candlestick chart, you will need to use the `CandlestickChart` & `CandlestickChart.Candles` components.
-
-The `CandlestickChart.Provider` component sets up the context of your chart, `CandlestickChart` composes the chart elements, and the `CandlestickChart.Candles` component renders your data in the form of a line path.
-
-> Note: This chart does not include an interactive cursor like in the animated example above. If you want one, [check out the "Interactive Cursors" guide](#interactive-cursors)
-
-```jsx
-import { CandlestickChart } from 'react-native-wagmi-charts';
-
-const data = [
-  {
-    timestamp: 1625945400000,
-    open: 33575.25,
-    high: 33600.52,
-    low: 33475.12,
-    close: 33520.11,
-  },
-  {
-    timestamp: 1625946300000,
-    open: 33545.25,
-    high: 33560.52,
-    low: 33510.12,
-    close: 33520.11,
-  },
-  {
-    timestamp: 1625947200000,
-    open: 33510.25,
-    high: 33515.52,
-    low: 33250.12,
-    close: 33250.11,
-  },
-  {
-    timestamp: 1625948100000,
-    open: 33215.25,
-    high: 33430.52,
-    low: 33215.12,
-    close: 33420.11,
-  },
-];
-
-function Example() {
-  return (
-    <CandlestickChart.Provider data={data}>
-      <CandlestickChart>
-        <CandlestickChart.Candles />
-      </CandlestickChart>
-    </CandlestickChart.Provider>
   );
 }
 ```
